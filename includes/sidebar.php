@@ -27,6 +27,9 @@ foreach($results as $result)
 
   <li class="no-padding"><a class="waves-effect waves-grey" href="myprofile.php"><i class="material-icons">account_box</i>My Profiles</a></li>
  
+ <li class="no-padding"><a class="waves-effect waves-grey" href="std-changepassword.php"><i class="material-icons">lock</i>Password</a></li>
+ 
+
                     <li class="no-padding">
                         <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">apps</i>Leaves<i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
                         <div class="collapsible-body">

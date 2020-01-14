@@ -1,7 +1,8 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include('includes/configure.php');
+include 'includes/config.php';
 if(strlen($_SESSION['emplogin'])==0)
     {   
 header('location:index.php');
@@ -17,11 +18,7 @@ else{
         <title>Student | Complaint History</title>
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-        <meta charset="UTF-8">
-        <meta name="description" content="Responsive Admin Dashboard Template" />
-        <meta name="keywords" content="admin,dashboard" />
-        <meta name="author" content="Steelcoders" />
-        
+
         <!-- Styles -->
         <link type="text/css" rel="stylesheet" href="assets/plugins/materialize/css/materialize.min.css"/>
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -73,29 +70,39 @@ else{
                                             <th>Room No</th>
                                             <th>Compaint Type</th>
                                              <th>Description</th>
+                                             <th>Reg Date</th>
                                         </tr>
                                     </thead>
                                  
                                     <tbody>
 <?php 
 $eid=$_SESSION['eid'];
-$sql = "SELECT * from tblcomplaint where EmpId=:eid";
-$query = $dbh -> prepare($sql);
-$query->bindParam(':eid',$eid,PDO::PARAM_STR);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-$cnt=1;
-if($query->rowCount() > 0)
+
+//code for show UserId number
+$query=mysqli_query($con,"select EmpId from tblstudents WHERE id=$eid limit 1");
+while($row=mysqli_fetch_array($query))
 {
-foreach($results as $result)
-{               ?>  
+ /*$rmno=$row['RoomNo'];*/
+ $empid=$row['EmpId'];
+}
+/*$RoomNo=$rmno;*/
+$EmpId=$empid;
+/*
+echo '<script> alert("Your EmpID No is  " + "'.$EmpId.'")</script>';
+*/
+$sql =mysqli_query($con,"SELECT RoomNo, Complaint, Description, regDate from tblcomplaint where EmpId='$eid'");
+/*$result = $con->query($sql);*/
+$cnt=1;
+    while($row = mysqli_fetch_array($sql) ){ ?>
+          
                                         <tr>
                                             <td> <?php echo htmlentities($cnt);?></td>
-                                            <td><?php echo htmlentities($result->RoomNo);?></td>
-                                            <td><?php echo htmlentities($result->Complaint);?></td>
-                                            <td><?php echo htmlentities($result->Description);?></td>
+                                            <td><?php echo htmlentities($row["RoomNo"]);?></td>
+                                            <td><?php echo htmlentities($row["Complaint"]);?></td>
+                                            <td><?php echo htmlentities($row["Description"]);?></td>
+                                            <td><?php echo htmlentities($row["regDate"]);?></td>
                                         </tr>
-                                         <?php $cnt++;} }?>
+                                         <?php $cnt++;} ?>
                                     </tbody>
                                 </table>
                             </div>

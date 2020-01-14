@@ -12,12 +12,12 @@ if(isset($_GET['inid']))
 {
 $id=$_GET['inid'];
 $status=0;
-$sql = "delete from tblleaves WHERE id=:id";
+$sql = "delete from tblcomplaint WHERE id=:id";
 $query = $dbh->prepare($sql);
 $query -> bindParam(':id',$id, PDO::PARAM_STR);
 
 $query -> execute();
-header('location:leaves.php');
+header('location:last-sevendays-complaints.php');
 }
 
  ?>
@@ -26,7 +26,7 @@ header('location:leaves.php');
     <head>
         
         <!-- Title -->
-        <title>Admin | Today's Leave </title>
+        <title>Admin | Last Seven Days's Complaints </title>
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
         <meta charset="UTF-8">
@@ -69,22 +69,22 @@ header('location:leaves.php');
        <?php include('includes/sidebar.php');?>
             <main class="mn-inner">
                 <div class="row">
-						
+                        
                     <div class="col lg4 s12">
-                        <div class="page-title">Today's Leave History</div>
-						</div>
+                        <div class="page-title">Last Seven Days Complaint History</div>
+                        </div>
                     <div class="col lg4 s12">
-                         <form action="todays-data.php" method="post">
+                         <form action="#" method="post">
                 <button type="submit" id="btnExport"
                     name='export' value="Export to Excel"
                     class="btn btn-info">Export to Excel</button>
             </form>
-						</div>
+                        </div>
                    
                     <div class="col s12 m12 l12">
                         <div class="card">
                             <div class="card-content">
-                                <span class="card-title">Today's Leave History</span>
+                                <span class="card-title">Last Seven Days Complaint History</span>
                                 <?php if($msg){?><div class="succWrap"><strong>SUCCESS</strong> : <?php echo htmlentities($msg); ?> </div><?php }?>
                                 <table id="example" class="display responsive-table ">
                                     <thead>
@@ -92,18 +92,20 @@ header('location:leaves.php');
                                             <th>#</th>
                                             <th width="220">Student Name</th>
                                             
-                                             <th >From Date</th>                 
-                                            <th >To Date</th> 
-                                            <th >Reporting</th> 
-                                            <th >BUS Required</th> 
-                                            <th>Description</th>
+                                             <th >Complaint Tyoe</th>                 
+                                            <th >Complaint Date</th> 
+                
                                             <th align="center">Action</th>
-                                           
+                                            <th align="center">View Details</th>
                                         </tr>
                                     </thead>
                                  
                                     <tbody>
-<?php $sql = "SELECT tblleaves.id as lid,tblstudents.FirstName,tblstudents.LastName,tblstudents.EmpId,tblstudents.id,tblleaves.FromDate,tblleaves.ToDate,tblleaves.ReportingDate,tblleaves.BusFacility,tblleaves.Description,tblleaves.PostingDate from tblleaves join tblstudents on tblleaves.empid=tblstudents.id where date(tblleaves.regDate)=CURDATE() order by tblleaves.FromDate desc";
+<?php $sql = "SELECT tblcomplaint.id as lid,tblcomplaint.EmpId,tblstudents.FirstName,tblstudents.LastName,
+                    tblstudents.EmpId,tblstudents.id,
+                     tblcomplaint.Complaint,tblcomplaint.regDate 
+                     from tblcomplaint join tblstudents on tblcomplaint.EmpId=tblstudents.id  where date(tblcomplaint.regDate)>= DATE(NOW()) - INTERVAL 7 DAY order by
+                     tblcomplaint.regDate desc";
 $query = $dbh -> prepare($sql);
 $query->execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -117,15 +119,13 @@ foreach($results as $result)
                                         <tr>
                                             <td> <b><?php echo htmlentities($cnt);?></b></td>
                                               <td><a href="editemployee.php?empid=<?php echo htmlentities($result->id);?>" target="_blank"><?php echo htmlentities($result->FirstName." ".$result->LastName);?>(<?php echo htmlentities($result->EmpId);?>)</a></td>
-                                            <td><?php echo htmlentities($result->FromDate);?></td>
-                                            <td><?php echo htmlentities($result->ToDate);?></td>
-                                            <td><?php echo htmlentities($result->ReportingDate);?></td>
-                                            <td><?php echo htmlentities($result->BusFacility);?></td>
-                                              <td><?php echo htmlentities($result->Description);?></td>                         
+                                            <td><?php echo htmlentities($result->Complaint);?></td>
+                                            <td><?php echo htmlentities($result->regDate);?></td>                         
 
            <td>
-<a href="leaves.php?inid=<?php echo htmlentities($result->lid);?>" onclick="return confirm('Are you sure you want to cancel this leave?');" > <i class="material-icons" >clear</i></a>
+<a href="complaints.php?inid=<?php echo htmlentities($result->lid);?>" onclick="return confirm('Are you sure you want to cancel this leave?');" > <i class="material-icons" >clear</i></a>
 </td>
+                <td><a href="complaint-detail.php?cid=<?php echo htmlentities($result->lid) ?>"><i class="material-icons" >info</i></a></td>
                                     </tr>
                                          <?php $cnt++;} }
                                         ?>
@@ -134,9 +134,9 @@ foreach($results as $result)
                             </div>
                         </div>
                     </div>
-					
+                    
                 </div>
-				
+                
             </main>
          
         

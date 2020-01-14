@@ -15,14 +15,26 @@ $lname=$_POST['lastName'];
 $email=$_POST['email']; 
 $password=md5($_POST['password']); 
 $gender=$_POST['gender']; 
-
 $address=$_POST['address']; 
 $city=$_POST['city']; 
+$mobileno=$_POST['mobileno'];
 
-$mobileno=$_POST['mobileno']; 
+$RoomNo=$_POST['RoomNo'];
+$MessType=$_POST['MessType'];
+$FoodPreference=$_POST['FoodPreference'];
+$Fast=$_POST['Fast'];
+$BusId=$_POST['BusId'];
+$BusName=$_POST['BusName'];
+$college=$_POST['college'];
+$year=$_POST['year'];
+$department=$_POST['department'];
+
 $status=1;
 
-$sql="INSERT INTO tblstudents(EmpId,FirstName,LastName,EmailId,Password,Gender,Address,City,Phonenumber,Status) VALUES(:empid,:fname,:lname,:email,:password,:gender,:address,:city,:mobileno,:status)";
+$sql="INSERT INTO tblstudents(EmpId,FirstName,LastName,EmailId,Password,Gender,Address,City,Phonenumber,Status,RoomNo,MessType,
+                  FoodPreference,Fast,BusId,BusName,college,year,department) 
+                  VALUES(:empid,:fname,:lname,:email,:password,:gender,:address,:city,:mobileno,:status,:RoomNo,:MessType,
+                  :FoodPreference,:Fast,:BusId,:BusName,:college,:year,:department)";
 $query = $dbh->prepare($sql);
 $query->bindParam(':empid',$empid,PDO::PARAM_STR);
 $query->bindParam(':fname',$fname,PDO::PARAM_STR);
@@ -30,18 +42,26 @@ $query->bindParam(':lname',$lname,PDO::PARAM_STR);
 $query->bindParam(':email',$email,PDO::PARAM_STR);
 $query->bindParam(':password',$password,PDO::PARAM_STR);
 $query->bindParam(':gender',$gender,PDO::PARAM_STR);
-
-
 $query->bindParam(':address',$address,PDO::PARAM_STR);
 $query->bindParam(':city',$city,PDO::PARAM_STR);
-
 $query->bindParam(':mobileno',$mobileno,PDO::PARAM_STR);
 $query->bindParam(':status',$status,PDO::PARAM_STR);
+
+$query->bindParam(':RoomNo',$RoomNo,PDO::PARAM_STR);
+$query->bindParam(':MessType',$MessType,PDO::PARAM_STR);
+$query->bindParam(':FoodPreference',$FoodPreference,PDO::PARAM_STR);
+$query->bindParam(':Fast',$Fast,PDO::PARAM_STR);
+$query->bindParam(':BusId',$BusId,PDO::PARAM_STR);
+$query->bindParam(':BusName',$BusName,PDO::PARAM_STR);
+$query->bindParam(':college',$college,PDO::PARAM_STR);
+$query->bindParam(':year',$year,PDO::PARAM_STR);
+$query->bindParam(':department',$department,PDO::PARAM_STR);
+
 $query->execute();
 $lastInsertId = $dbh->lastInsertId();
 if($lastInsertId)
 {
-$msg="Employee record added Successfully";
+$msg="Student record added Successfully";
 }
 else 
 {
@@ -207,13 +227,14 @@ error:function (){}
 <label for="confirm">Confirm password</label>
 <input id="confirm" name="confirmpassword" type="password" autocomplete="off" required>
 </div>
-</div>
-</div>
-                                                    
-<div class="col m6">
-<div class="row">
+
+<div class="input-field col s12">
+<label for="phone">Mobile number</label>
+<input id="phone" name="mobileno" type="tel" maxlength="10" autocomplete="off" required>
+ </div>
+
 <div class="input-field col m6 s12">
-<select  name="gender" autocomplete="off">
+<select  name="gender" autocomplete="off" required>
 <option value="">Gender...</option>                                          
 <option value="Male">Male</option>
 <option value="Female">Female</option>
@@ -224,7 +245,7 @@ error:function (){}
 
 
 
-<div class="input-field col m6 s12">
+<div class="input-field col s12">
 <label for="address">Address</label>
 <input id="address" name="address" type="text" autocomplete="off" required>
 </div>
@@ -233,16 +254,68 @@ error:function (){}
 <label for="city">City/Town</label>
 <input id="city" name="city" type="text" autocomplete="off" required>
  </div>
-   
 
+</div>
+</div>
+                                                    
+<div class="col m6">
+<div class="row">
 
-                                                            
-<div class="input-field col s12">
-<label for="phone">Mobile number</label>
-<input id="phone" name="mobileno" type="tel" maxlength="10" autocomplete="off" required>
+        <div class="input-field col m6 s12">
+<label for="RoomNo">Room No</label>
+<input id="RoomNo" name="RoomNo" type="text"  autocomplete="off" required>
  </div>
 
-                                                        
+<div class="input-field col m6 s12">
+<label for="MessType">Mess Type</label>
+<input id="MessType" name="MessType" type="text" autocomplete="off" required >
+ </div>
+
+<div class=" col m6  s12">
+<select  name="FoodPreference" autocomplete="off">
+<option value="">Food Preference...</option>                                           
+<option value="veg">Veg</option>
+<option value="non-veg">Non-veg</option>
+</select>
+</div>
+
+ 
+
+<div class=" col m6 ">
+<label for="Fast">Do you Keep fast ?</label>
+<select  name="Fast" autocomplete="off">
+<option value="">Fast...</option>                                       
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
+</div>
+
+ <div class="input-field col m6 s12">
+<label for="BusId">Bus Id</label>
+<input id="BusId" name="BusId" type="text"  autocomplete="off" required>
+ </div>
+
+  <div class="input-field col m6 s12">
+<label for="BusName">Bus Name</label>
+<input id="BusName" name="BusName" type="text"  autocomplete="off" required>
+ </div>
+
+  <div class="input-field col m6 s12">
+<label for="College">College Name</label>
+<input id="college" name="college" type="text"  autocomplete="off" required>
+ </div>
+
+  <div class="input-field col m6 s12">
+<label for="year">Year</label>
+<input id="year" name="year" type="text"  autocomplete="off" required>
+ </div>
+
+  <div class="input-field col m6 s12">
+<label for="department">Department</label>
+<input id="department" name="department" type="text" autocomplete="off" required>
+ </div>
+
+                                                
 <div class="input-field col s12">
 <button type="submit" name="add" onclick="return valid();" id="add" class="waves-effect waves-light btn indigo m-b-xs">ADD</button>
 

@@ -34,8 +34,9 @@
                         <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">desktop_windows</i>Leave Management<i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
                         <div class="collapsible-body">
                             <ul>
-                                <li><a href="last-sevendays-leaves.php">Last 7 Days Leaves</a></li>
                                 <li><a href="todays-leaves.php">Today's Leaves</a></li>
+                                <li><a href="last-sevendays-leaves.php">Last 7 Days Leaves</a></li>
+                                
                                 <li><a href="leaves.php">All Leaves </a></li>
 								
                                 
@@ -48,9 +49,10 @@
                         <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">description</i>Complaint Management<i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
                         <div class="collapsible-body">
                             <ul>
-                                <li><a href="#">Last 7 Days Complaints</a></li>
-                                <li><a href="#">Today's Complaints</a></li>
-                                <li><a href="leaves.php">All Complaints </a></li>
+                                <li><a href="todays-complaints.php">Today's Complaints</a></li>
+                                <li><a href="last-sevendays-complaints.php">Last 7 Days Complaints</a></li>
+                                
+                                <li><a href="complaints.php">All Complaints </a></li>
                             </ul>
                         </div>
                     </li>

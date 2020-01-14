@@ -1,6 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
+include('includes/configure.php');
 include('includes/config.php');
 if(strlen($_SESSION['emplogin'])==0)
     {   
@@ -9,40 +10,42 @@ header('location:index.php');
 else{
 if(isset($_POST['apply']))
 {
-$empid=$_SESSION['eid'];
-$Complaint=$_POST['Complaint'];
-$description=$_POST['description'];
-    
-    $sql = "SELECT RoomNo from tblstudents where empid=:eid ";
-$query = $dbh -> prepare($sql);
-$query->bindParam(':eid',$empid,PDO::PARAM_STR);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-$cnt=1;
-if($query->rowCount() > 0)
+    $empid=$_SESSION['eid'];
+    $Complaint=$_POST['Complaint'];
+    $description=$_POST['description'];
+      
+// code for show UserId number
+$query=mysqli_query($con,"select RoomNo,EmpId from tblstudents WHERE id=$empid limit 1");
+while($row=mysqli_fetch_array($query))
 {
-foreach($results as $result)
-{ 
-    $RoomNo= $result->RoomNo;
+ $rmno=$row['RoomNo'];
+ $eid=$row['EmpId'];
 }
+$RoomNo=$rmno;
+$EmpId=$eid;
+/*echo '<script> alert("Your Room No is  "+"'.$RoomNo.'" + "'.$EmpId.'")</script>';*/
 
-echo($id);
-$sql1="INSERT INTO tblcomplaint(EmpId, RoomNo, Complaint, Description) VALUES(:eid,:RoomNo,:Complaint,:description)";
-$query1 = $dbh->prepare($sql1);
-$query1->bindParam(':EmpId',$newfromdate,PDO::PARAM_STR);
-$query1->bindParam(':RoomNo',$newtodate,PDO::PARAM_STR);
-$query1->bindParam(':Complaint',$repodate,PDO::PARAM_STR);      
-$query1->bindParam(':description',$description,PDO::PARAM_STR);
-$query1->execute();
-$lastInsertId = $dbh->lastInsertId();
-if($lastInsertId)
+$sql = "INSERT INTO tblcomplaint(EmpId, RoomNo, Complaint, Description) VALUES('$empid','$RoomNo','$Complaint','$description')";
+
+
+if (mysqli_query($con, $sql)) {
+    /*echo "New record created successfully";*/
+    $query1=mysqli_query($con,"SELECT * FROM `contact` WHERE type='$Complaint'");
+while($row=mysqli_fetch_array($query1))
 {
+ $name=$row['FullName'];
+ $phone=$row['phone'];
+ $type=$row['type'];
+
+}
+/*echo "<div class='succWrap'>".$name."</div>";
+echo "<br>";
+echo "<div class='succWrap'>".$phone."</div>";*/
+/*echo'<script> alert( "Please contact"+"'.$name.'" + "'.$phone.'")</script>';*/
 $msg="Complaint applied successfully";
-}
-else 
-{
-$error="Something went wrong. Please try again";
-}
+} else {
+    echo "Error: " . $sql . "<br>" . mysqli_error($con);
+    /*$error="Something went wrong. Please try again";*/
 }
 }
 
@@ -57,15 +60,15 @@ $error="Something went wrong. Please try again";
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
         <meta charset="UTF-8">
-        <meta name="description" content="Responsive Admin Dashboard Template" />
-        <meta name="keywords" content="admin,dashboard" />
-        <meta name="author" content="Steelcoders" />
-        
     
         <!-- Styles -->
         <link type="text/css" rel="stylesheet" href="assets/plugins/materialize/css/materialize.min.css"/>
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <!-- <link href="assets/plugins/material-preloader/css/materialPreloader.min.css" rel="stylesheet">  -->
+       <!--  <link href="assets/plugins/material-preloader/css/materialPreloader.min.css" rel="stylesheet"> -->
+        <link href="assets/plugins/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+
+            
+        <!-- Theme Styles -->
         <link href="assets/css/alpha.min.css" rel="stylesheet" type="text/css"/>
         <link href="assets/css/custom.css" rel="stylesheet" type="text/css"/>
   <style>
@@ -91,7 +94,7 @@ $error="Something went wrong. Please try again";
 
     </head>
     <body>
-  <?php include('includes/header.php');?>
+    <?php include('includes/header.php');?>
             
        <?php include('includes/sidebar.php');?>
    <main class="mn-inner">
@@ -112,7 +115,14 @@ $error="Something went wrong. Please try again";
                                                     <div class="col m12">
                                                         <div class="row">
      <?php if($error){?><div class="errorWrap"><strong>ERROR </strong>:<?php echo htmlentities($error); ?> </div><?php } 
-                else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php }?>
+                else if($msg){?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?>
+                <h6>Please Contact </h6>
+                Name :
+                <?php echo htmlentities($name); ?> <br>
+                Phone Number :
+                <?php echo htmlentities($phone) ?><br>
+
+                </div><?php }?>
        
 </div>
 <div class="form-control col m6 s12">
@@ -149,7 +159,6 @@ $error="Something went wrong. Please try again";
                 </div>
             </main>
         </div>
-        <div class="left-sidebar-hover"></div>
         
         <!-- Javascripts -->
         <script src="assets/plugins/jquery/jquery-2.2.0.min.js"></script>

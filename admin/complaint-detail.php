@@ -7,57 +7,7 @@ if(strlen($_SESSION['alogin'])==0)
 header('location:index.php');
 }
 else{
-$eid=intval($_GET['empid']);
-if(isset($_POST['update']))
-{
-$email=$_POST['email'];
-$fname=$_POST['firstName'];
-$lname=$_POST['lastName'];   
-$gender=$_POST['gender'];  
-$department=$_POST['department']; 
-$address=$_POST['address']; 
-$city=$_POST['city']; 
-$mobileno=$_POST['mobileno'];
-$RoomNo=$_POST['RoomNo'];
-$MessType=$_POST['MessType'];
-$FoodPreference=$_POST['FoodPreference'];
-$Fast=$_POST['Fast'];
-$BusId=$_POST['BusId'];
-$BusName=$_POST['BusName'];
-$college=$_POST['college'];
-$year=$_POST['year'];
-
-
-$sql="update tblstudents set FirstName=:fname,LastName=:lname,department=:department,Gender=:gender,Address=:address,
-                                City=:city,EmailId=:email,Phonenumber=:mobileno,RoomNo=:RoomNo,MessType=:MessType,
-                                FoodPreference=:FoodPreference,Fast=:Fast,BusId=:BusId,BusName=:BusName,college=:college,
-                                year=:year where id=:eid";
-$query = $dbh->prepare($sql);
-$query->bindParam(':fname',$fname,PDO::PARAM_STR);
-$query->bindParam(':lname',$lname,PDO::PARAM_STR);
-$query->bindParam(':department',$department,PDO::PARAM_STR);
-$query->bindParam(':gender',$gender,PDO::PARAM_STR);
-$query->bindParam(':address',$address,PDO::PARAM_STR);
-$query->bindParam(':city',$city,PDO::PARAM_STR);
-$query->bindParam(':email',$email,PDO::PARAM_STR);
-$query->bindParam(':mobileno',$mobileno,PDO::PARAM_STR);
-$query->bindParam(':RoomNo',$RoomNo,PDO::PARAM_STR);
-$query->bindParam(':MessType',$MessType,PDO::PARAM_STR);
-$query->bindParam(':FoodPreference',$FoodPreference,PDO::PARAM_STR);
-$query->bindParam(':Fast',$Fast,PDO::PARAM_STR);
-$query->bindParam(':BusId',$BusId,PDO::PARAM_STR);
-$query->bindParam(':BusName',$BusName,PDO::PARAM_STR);
-$query->bindParam(':college',$college,PDO::PARAM_STR);
-$query->bindParam(':year',$year,PDO::PARAM_STR);
-
-$query->bindParam(':eid',$eid,PDO::PARAM_STR);
-$query->execute();
-    if($query->error){
-     $msg="Somethings wrong ,record not updated.";   
-    }
-else{    
-$msg=" record updated Successfully";
-}
+$eid=$_GET['cid'];
 }
     ?>
 
@@ -66,8 +16,8 @@ $msg=" record updated Successfully";
     <head>
         
         <!-- Title -->
-        <title>Admin | Update Student</title>
-        
+        <title>Admin | Complaint Details</title>
+    
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
         <meta charset="UTF-8">
         <meta name="description" content="Responsive Admin Dashboard Template" />
@@ -111,14 +61,14 @@ $msg=" record updated Successfully";
    <main class="mn-inner">
                 <div class="row">
                     <div class="col s12">
-                        <div class="page-title">Update student</div>
+                        <div class="page-title">Complaint Details</div>
                     </div>
                     <div class="col s12 m12 l12">
                         <div class="card">
                             <div class="card-content">
                                 <form id="example-form" method="post" name="updatemp">
                                     <div>
-                                        <h3>Update Student Info</h3>
+                                        <h3>Complaint Details</h3>
                                            <?php if($error){?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } 
                 else if($msg){?><div class="succWrap"><strong>SUCCESS</strong> : <?php echo htmlentities($msg); ?> </div><?php }?>
                                         <section>
@@ -127,7 +77,7 @@ $msg=" record updated Successfully";
                                                     <div class="col m6">
                                                         <div class="row">
 <?php 
-$eid=intval($_GET['empid']);
+$eid=$_GET['cid'];
 $sql = "SELECT * from  tblstudents where id=:eid ";
 $query = $dbh -> prepare($sql);
 $query -> bindParam(':eid',$eid, PDO::PARAM_STR);
@@ -286,4 +236,3 @@ foreach($results as $result)
         
     </body>
 </html>
-<?php } ?> 

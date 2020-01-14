@@ -26,7 +26,7 @@ header('location:leaves.php');
     <head>
         
         <!-- Title -->
-        <title>Admin | Total Leave </title>
+        <title>Admin | Last Seven Days Leaves </title>
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
         <meta charset="UTF-8">
@@ -71,7 +71,7 @@ header('location:leaves.php');
                 <div class="row">
 						
                     <div class="col lg4 s12">
-                        <div class="page-title">Leave History</div>
+                        <div class="page-title">Last Seven Days Leave History</div>
 						</div>
                     <div class="col lg4 s12">
                          <form action="last-sevendays-data.php" method="post">
@@ -84,7 +84,7 @@ header('location:leaves.php');
                     <div class="col s12 m12 l12">
                         <div class="card">
                             <div class="card-content">
-                                <span class="card-title">Leave History</span>
+                                <span class="card-title">Last Seven Days Leave History</span>
                                 <?php if($msg){?><div class="succWrap"><strong>SUCCESS</strong> : <?php echo htmlentities($msg); ?> </div><?php }?>
                                 <table id="example" class="display responsive-table ">
                                     <thead>
