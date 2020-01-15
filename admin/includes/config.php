@@ -1,9 +1,9 @@
 <?php 
 // DB credentials.
-define('DB_HOST','localhost');
-define('DB_USER','root');
-define('DB_PASS','');
-define('DB_NAME','slms');
+define('DB_HOST','sql310.epizy.com');
+define('DB_USER','epiz_25061212');
+define('DB_PASS','vihostel');
+define('DB_NAME','epiz_25061212_slms');
 // Establish database connection.
 try
 {

@@ -26,7 +26,7 @@ header('location:last-sevendays-complaints.php');
     <head>
         
         <!-- Title -->
-        <title>Admin | Today's Complaints </title>
+        <title>Admin | Todays Complaint</title>
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
         <meta charset="UTF-8">
@@ -71,7 +71,7 @@ header('location:last-sevendays-complaints.php');
                 <div class="row">
                         
                     <div class="col lg4 s12">
-                        <div class="page-title">Today's Complaint History</div>
+                        <div class="page-title"> Todays Complaint History</div>
                         </div>
                     <div class="col lg4 s12">
                          <form action="#" method="post">
@@ -84,7 +84,7 @@ header('location:last-sevendays-complaints.php');
                     <div class="col s12 m12 l12">
                         <div class="card">
                             <div class="card-content">
-                                <span class="card-title">Today's Complaint History</span>
+                                <span class="card-title"> Todays Complaint History</span>
                                 <?php if($msg){?><div class="succWrap"><strong>SUCCESS</strong> : <?php echo htmlentities($msg); ?> </div><?php }?>
                                 <table id="example" class="display responsive-table ">
                                     <thead>
@@ -102,8 +102,9 @@ header('location:last-sevendays-complaints.php');
                                  
                                     <tbody>
 <?php $sql = "SELECT tblcomplaint.id as lid,tblcomplaint.EmpId,tblstudents.FirstName,tblstudents.LastName,
-                    tblstudents.EmpId,tblstudents.id,tblcomplaint.Complaint,tblcomplaint.regDate from tblcomplaint 
-                    join tblstudents on tblcomplaint.EmpId=tblstudents.id  where date(regDate)=CURDATE() order by
+                    tblstudents.EmpId,tblstudents.id,
+                     tblcomplaint.Complaint,tblcomplaint.regDate 
+                     from tblcomplaint join tblstudents on tblcomplaint.EmpId=tblstudents.id where date(tblcomplaint.regDate)=CURDATE()  order by
                     tblcomplaint.regDate desc";
 $query = $dbh -> prepare($sql);
 $query->execute();

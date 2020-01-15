@@ -7,7 +7,7 @@ if(strlen($_SESSION['alogin'])==0)
 header('location:index.php');
 }
 else{
-$eid=$_GET['cid'];
+$eid=intval($_GET['cid']);
 }
     ?>
 
@@ -20,40 +20,13 @@ $eid=$_GET['cid'];
     
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
         <meta charset="UTF-8">
-        <meta name="description" content="Responsive Admin Dashboard Template" />
-        <meta name="keywords" content="admin,dashboard" />
-        <meta name="author" content="Steelcoders" />
-        
-        <!-- Styles -->
+      <!-- Styles -->
         <link type="text/css" rel="stylesheet" href="../assets/plugins/materialize/css/materialize.min.css"/>
         <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="../assets/plugins/material-preloader/css/materialPreloader.min.css" rel="stylesheet"> 
         <link href="../assets/css/alpha.min.css" rel="stylesheet" type="text/css"/>
         <link href="../assets/css/custom.css" rel="stylesheet" type="text/css"/>
-  <style>
-        .errorWrap {
-    padding: 10px;
-    margin: 0 0 20px 0;
-    background: #fff;
-    border-left: 4px solid #dd3d36;
-    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-}
-.succWrap{
-    padding: 10px;
-    margin: 0 0 20px 0;
-    background: #fff;
-    border-left: 4px solid #5cb85c;
-    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-}
-        </style>
-
-
-
-
-
-    </head>
+ </head>
     <body>
   <?php include('includes/header.php');?>
             
@@ -69,147 +42,76 @@ $eid=$_GET['cid'];
                                 <form id="example-form" method="post" name="updatemp">
                                     <div>
                                         <h3>Complaint Details</h3>
-                                           <?php if($error){?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } 
-                else if($msg){?><div class="succWrap"><strong>SUCCESS</strong> : <?php echo htmlentities($msg); ?> </div><?php }?>
                                         <section>
                                             <div class="wizard-content">
                                                 <div class="row">
-                                                    <div class="col m6">
+                                                    <div class="col s12">
                                                         <div class="row">
 <?php 
-$eid=$_GET['cid'];
-$sql = "SELECT * from  tblstudents where id=:eid ";
-$query = $dbh -> prepare($sql);
-$query -> bindParam(':eid',$eid, PDO::PARAM_STR);
-$query->execute();
+$cid=$_GET['cid'];
+/*$sql = "SELECT * from  tblcomplaint";*/
+$sql = "SELECT * FROM tblcomplaint WHERE id=:cid limit 1";
+$query = $dbh->prepare($sql);
+$query -> bindParam(':cid',$cid, PDO::PARAM_INT);
+$query -> execute();
 $results=$query->fetchAll(PDO::FETCH_OBJ);
 $cnt=1;
 if($query->rowCount() > 0)
 {
 foreach($results as $result)
-{               ?> 
- <div class="input-field col  s12">
-<label for="empcode">Student Code(Must be unique)</label>
-<input  name="empcode" id="empcode" value="<?php echo htmlentities($result->EmpId);?>" type="text" autocomplete="off"  required>
-<span id="empid-availability" style="font-size:12px;"></span> 
-</div>
+{           
+    $empid=$result->EmpId;
+
+    $sql = "SELECT EmpId,FirstName,LastName FROM tblstudents WHERE id=:empid limit 1";
+$query = $dbh->prepare($sql);
+$query -> bindParam(':empid',$empid, PDO::PARAM_INT);
+$query -> execute();
+$rows=$query->fetchAll(PDO::FETCH_OBJ);
+if($query->rowCount() > 0)
+{
+foreach($rows as $row)
+{
+    ?> 
+<div class="input-field col  m6">
+<label for="empcode">Student Code</label>
+<input  name="empcode" id="empcode" value="<?php echo htmlentities($row->EmpId);?>" type="text" autocomplete="off"  readonly>
+</div> 
+
+<div class="input-field col  m6">
+<label for="empcode">Student Name</label>
+<input  name="empcode" id="empcode" value="<?php echo htmlentities($row->FirstName." ".$row->LastName);?>" type="text" autocomplete="off"  readonly>
+</div> 
+
+<?php } }?>
+
 
 
 <div class="input-field col m6 s12">
-<label for="firstName">First name</label>
-<input id="firstName" name="firstName" value="<?php echo htmlentities($result->FirstName);?>"  type="text" required>
+<label for="roomno">Room No</label>
+<input id="roomno" name="roomno" value="<?php echo htmlentities($result->RoomNo);?>"  type="text" readonly>
 </div>
 
 <div class="input-field col m6 s12">
-<label for="lastName">Last name </label>
-<input id="lastName" name="lastName" value="<?php echo htmlentities($result->LastName);?>" type="text" autocomplete="off" required>
+<label for="complaint">Complaint </label>
+<input id="complaint" name="complaint" value="<?php echo htmlentities($result->Complaint);?>" type="text" autocomplete="off" readonly>
 </div>
 
 <div class="input-field col s12">
-<label for="email">Email</label>
-<input  name="email" type="email" id="email" value="<?php echo htmlentities($result->EmailId);?>" autocomplete="off" required>
-<span id="emailid-availability" style="font-size:12px;"></span> 
+<label for="description">Description</label>
+<textarea id="description" name="description" class="materialize-textarea" length="500" readonly><?php echo htmlentities($result->Description);?></textarea>
 </div>
 
 <div class="input-field col s12">
-<label for="phone">Mobile number</label>
-<input id="phone" name="mobileno" type="tel" value="<?php echo htmlentities($result->Phonenumber);?>" maxlength="10" autocomplete="off" required>
- </div>
-
-
- <div class=" col m6 s12">
-    <label for="gender">Gender</label>
-<select  name="gender" autocomplete="off">
-<option value="<?php echo htmlentities($result->Gender);?>"><?php echo htmlentities($result->Gender);?></option>
-<option value="Male">Male</option>
-<option value="Female">Female</option>
-<option value="Other">Other</option>
-</select>
-</div>
-
-<div class="input-field col s12">
-<label for="address">Address</label>
-<input id="address" name="address" type="text"  value="<?php echo htmlentities($result->Address);?>" autocomplete="off" required>
-</div>
-
-
-<div class="input-field col m6 s12">
-<label for="city">City/Town</label>
-<input id="city" name="city" type="text"  value="<?php echo htmlentities($result->City);?>" autocomplete="off" required>
+<label for="regDate">Reporting Date</label>
+<input id="regDate" name="regDate" type="tel" value="<?php echo htmlentities($result->regDate);?>" maxlength="10" autocomplete="off" readonly>
  </div>
 
 </div>
 </div>
-  <!-- College Info-->                                        
-<div class="col m6">
-<div class="row">
-
-    <div class="input-field col m6 s12">
-<label for="RoomNo">Room No</label>
-<input id="RoomNo" name="RoomNo" type="text" value="<?php echo htmlentities($result->RoomNo);?>"  autocomplete="off" required>
- </div>
-
-<div class="input-field col m6 s12">
-<label for="MessType">Mess Type</label>
-<input id="MessType" name="MessType" type="text" value="<?php echo htmlentities($result->MessType);?>" autocomplete="off" required >
- </div>
-
-<div class=" col m6  s12">
-<label for="FoodPreference">Food Preference</label>
-<select  name="FoodPreference" autocomplete="off">
-<option value="<?php echo htmlentities($result->FoodPreference);?>"><?php echo htmlentities($result->FoodPreference);?></option>                                          
-<option value="veg">Veg</option>
-<option value="non-veg">Non-veg</option>
-</select>
-</div>
-
- 
-
-<div class=" col m6 ">
-<label for="Fast">Do you Keep fast ?</label>
-<select  name="Fast" autocomplete="off">
-<option value="<?php echo htmlentities($result->Fast);?>"><?php echo htmlentities($result->Fast);?></option>                                          
-<option value="yes">Yes</option>
-<option value="no">No</option>
-</select>
-</div>
-
- <div class="input-field col m6 s12">
-<label for="BusId">Bus Id</label>
-<input id="BusId" name="BusId" type="text" value="<?php echo htmlentities($result->BusId);?>"  autocomplete="off" required>
- </div>
-
-  <div class="input-field col m6 s12">
-<label for="BusName">Bus Name</label>
-<input id="BusName" name="BusName" type="text" value="<?php echo htmlentities($result->BusName);?>"  autocomplete="off" required>
- </div>
-
-  <div class="input-field col m6 s12">
-<label for="College">College Name</label>
-<input id="college" name="college" type="text" value="<?php echo htmlentities($result->college);?>"  autocomplete="off" required>
- </div>
-
-  <div class="input-field col m6 s12">
-<label for="year">Year</label>
-<input id="year" name="year" type="text" value="<?php echo htmlentities($result->year);?>"  autocomplete="off" required>
- </div>
-
-  <div class="input-field col m6 s12">
-<label for="department">Department</label>
-<input id="department" name="department" type="text" value="<?php echo htmlentities($result->department);?>" autocomplete="off" required>
- </div>
-
 
 <?php }}?>
-                                                    <!-- College Info End-->
-                                                            
-<div class="input-field col s12">
-<button type="submit" name="update"  id="update" class="waves-effect waves-light btn indigo m-b-xs">UPDATE</button>
 
-</div>
-
-                                                        </div>
-                                                    </div>
+                                                    
                                                 </div>
                                             </div>
                                         </section>
@@ -232,7 +134,5 @@ foreach($results as $result)
         <script src="../assets/plugins/material-preloader/js/materialPreloader.min.js"></script>
         <script src="../assets/plugins/jquery-blockui/jquery.blockui.js"></script>
         <script src="../assets/js/alpha.min.js"></script>
-        <script src="../assets/js/pages/form_elements.js"></script>
-        
     </body>
 </html>
