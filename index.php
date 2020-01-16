@@ -61,6 +61,7 @@ else{
         <link href="assets/css/custom.css" rel="stylesheet" type="text/css"/>
 
          <style>
+
         .succWrap{
     padding: 10px;
     margin: 0 0 20px 0;
@@ -75,6 +76,14 @@ else{
     border-left: 4px solid #dd3d36;
     -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
     box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+
+html { 
+  background: url(assets/images/hostel-room.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
         </style>
@@ -161,7 +170,7 @@ else{
             <main class="mn-inner">
                 <div class="row">
                     <div class="col s12">
-                        <div class="page-title"><h4>Welcome to Student Leave Management System</h4></div>
+                        <div class="page-title" align="center"><h4 style="color: white;" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome <br> Leave Management System</h4></div>
 
                           <div class="col s12 m6 l8 offset-l2 offset-m3">
                               <div class="card white darken-1">
